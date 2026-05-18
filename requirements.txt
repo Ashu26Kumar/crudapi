@@ -1,0 +1,5 @@
+fastapi[all]
+ruff
+uvicorn[standard]
+pylance
+ptpython
