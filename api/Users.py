@@ -5,13 +5,13 @@ from fastapi import APIRouter, HTTPException
 
 from data.CreateNewUserRequet import CreateNewUserRequest
 from schemas.database import UserInfoDataModel
-from session import dbRepository
+from services.UserService import UserRepository
 
 router = APIRouter()
 
 
 @router.get("/{id}",status_code=200)
-async def get_user_by_id(id:int,db:dbRepository)->UserInfoDataModel:
+async def get_user_by_id(id:int,user:UserRepository)->UserInfoDataModel:
     '''
         Calling the postgres sql database (crudapi) to get data by id
         `Params`: Id
@@ -19,7 +19,7 @@ async def get_user_by_id(id:int,db:dbRepository)->UserInfoDataModel:
 
     '''
     try:
-        data = await  db.get(UserInfoDataModel,id)
+        data = await  user.getUserById(id)
         if data is None:
             raise HTTPException(status_code=404, detail="No users found")
         return data
@@ -27,7 +27,7 @@ async def get_user_by_id(id:int,db:dbRepository)->UserInfoDataModel:
         print("Getting Exception while connection to database", e)
 
 @router.post("/createUser",status_code= 201)
-async def create_new_user(req:CreateNewUserRequest,db:dbRepository)->None:
+async def create_new_user(req:CreateNewUserRequest,user:UserRepository)-> UserInfoDataModel:
     try:
         data = UserInfoDataModel(
             firstName= req.firstName,
@@ -35,19 +35,17 @@ async def create_new_user(req:CreateNewUserRequest,db:dbRepository)->None:
             age=req.age
         )
 
-        db.add(data)
-        await db.commit()
-        await db.refresh(data)
+        result = await user.addUsers(data)
+
+        return result
 
     except Exception as e:
         print("Unable to save data to database :" ,e)
 
 @router.delete("/{id}",status_code=200)
-async def delete_user_by_id(id:int, db:dbRepository)->None:
+async def delete_user_by_id(id:int, user:UserRepository)->None:
     try:
-        data = await db.get(UserInfoDataModel,id)           
-        await db.delete(data)
-        await db.commit()
+        await user.deleteUserById(id)
         print("User with id {} has been deleted successfully".format(id))
         
     except Exception as e:
