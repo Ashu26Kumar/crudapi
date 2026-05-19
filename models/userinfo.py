@@ -1,5 +1,5 @@
 
-from pydantic import BaseModel, Field,field_validator,computed_field
+from pydantic import BaseModel, Field,field_validator
 
 class UserInfoDto(BaseModel):
     firstName : str = Field(...,max_length=25,min_length=3,description="First name of the user",)
