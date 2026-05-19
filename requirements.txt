@@ -3,3 +3,4 @@ ruff
 uvicorn[standard]
 pylance
 ptpython
+scalar_fastapi

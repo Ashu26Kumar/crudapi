@@ -15,8 +15,8 @@ engine = create_async_engine(
 
 async def create_db_tables():
     async with engine.begin() as e :
-        from database import UserInfoModel 
-        await e.run_sync(SQLModel.metadata.create_all(bind=engine))
+        from schemas.database import UserInfoDataModel 
+        await e.run_sync(SQLModel.metadata.create_all)
 
 async def get_session():
     session = sessionmaker(
