@@ -12,7 +12,7 @@ class UserInfoDataModel(SQLModel,table = True):
     firstName : str
     lastName:str
     age : int
-    lastModifiedOn : datetime= Field(default=datetime.now(timezone.utc))
-    created_On : datetime= Field(default=datetime.now(timezone.utc))
+    lastModifiedOn : datetime= Field(default=datetime.now())
+    created_On : datetime= Field(default=datetime.now())
 
 
