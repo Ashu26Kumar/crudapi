@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException
 from data.CreateNewUserRequet import CreateNewUserRequest
 from schemas.database import UserInfoDataModel
 from services.UserService import UserRepository
+from models.userinfo import UserUpdateDTO
 
 router = APIRouter()
 
@@ -52,3 +53,10 @@ async def delete_user_by_id(id:int, user:UserRepository)->None:
         print("Unable to delete the data : ", e)
         raise HTTPException(status_code=500)
 
+@router.patch("/{id}",status_code= 200 , response_model= UserInfoDataModel)
+async def update_users(id:int,user:UserUpdateDTO, userService:UserRepository)->UserInfoDataModel:
+    try:
+        result = await userService.updateUserData(user, id)
+        return result
+    except Exception as e:
+        print("Unable to update the user : ",e)

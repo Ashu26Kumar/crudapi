@@ -1,4 +1,7 @@
 
+from datetime import datetime
+from typing import Optional
+
 from pydantic import BaseModel, Field,field_validator
 
 class UserInfoDto(BaseModel):
@@ -16,3 +19,10 @@ class UserInfoDto(BaseModel):
     @property
     def full_name(self)->str:
         return "{} {}".format(self.firstName,self.lastName)
+    
+
+class UserUpdateDTO(BaseModel):
+    firstName : Optional[str|None] = None
+    lastName : Optional[str|None] = None
+    lastModifiedOn : Optional[datetime] = Field(default=datetime.now())
+  
